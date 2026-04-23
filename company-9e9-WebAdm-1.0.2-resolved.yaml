@@ -1,0 +1,764 @@
+openapi: 3.0.0
+info:
+  title: БИЗ - Сайт
+  description: Сервис для обмена информацией между базой интернет заказов и сайтом
+  contact:
+    name: '@freska_04'
+  version: 1.0.2
+servers:
+- url: http://192.168.103.123/IronOnlineTrade/hs/api/v1/
+  description: Dev server
+paths:
+  /exchange/general:
+    get:
+      tags:
+      - general
+      summary: общий метод выгрузки изменений
+      description: Получение изменений справочников и регистров
+      operationId: generalGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/general"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/units:
+    get:
+      tags:
+      - separately
+      summary: единицы измерения
+      description: Получение изменений справочника "КлассификаторЕдиницИзмерения"
+      operationId: unitsGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/units"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/properties:
+    get:
+      tags:
+      - separately
+      summary: свойства номенклатуры
+      description: "Получение изменений справочников \"Стикеры\", \"ВидПродукта\" и \"АналитическиеПризнакиНоменклатуры\". Элементы признаков типа \"list\" выгружаются лишь измененные"
+      operationId: propertiesGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/properties"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/storages:
+    get:
+      tags:
+      - separately
+      summary: магазины
+      description: Получение изменений справочника "Магазины"
+      operationId: storagesGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/storages"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/prices:
+    get:
+      tags:
+      - separately
+      summary: цены товаров
+      description: Получение изменений справочника "ЦеныНоменклатуры"
+      operationId: pricesGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/productsPrices"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/products:
+    get:
+      tags:
+      - separately
+      summary: товары
+      description: Получение изменений справочника "Номенклатура"
+      operationId: productsGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/products"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/rests:
+    get:
+      tags:
+      - separately
+      summary: остатки товаров
+      description: Получение изменений регистра сведений "ОстаткиТоваров"
+      operationId: restsGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/rests"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/groups:
+    get:
+      tags:
+      - separately
+      summary: "категории, подкатегории"
+      description: Получение изменений справочника "НаборыПризнаковНоменклатуры"
+      operationId: groupsGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/groups"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/categoryProperties:
+    get:
+      tags:
+      - separately
+      summary: виды продуктов
+      description: Получение изменений справочника "ПризнакиИнтернетМагазина"
+      operationId: gcategoryPropertiesGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/categoryProperties"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /exchange/photos:
+    get:
+      tags:
+      - separately
+      summary: картинки товаров
+      description: Получение изменений справочника "ПрисоеденненныеФайлыНоменклатура"
+      operationId: photosGet
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      responses:
+        "200":
+          description: Успешный ответ со списком измененных элеменов
+          headers:
+            messageNumber:
+              description: Номер отправленного сообщения обмена
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/photos"
+        "204":
+          description: Нет изменений
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан код магазина / Не найден магазин / Не найден узел обмена
+        "500":
+          description: Ошибка сервера
+  /unregister/{object}/{messageNumber}:
+    patch:
+      tags:
+      - unregister
+      summary: подтверждение загрузки данных
+      description: Отмена регистрации изменений
+      operationId: unregisterPatch
+      parameters:
+      - name: storeCode
+        in: header
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        required: true
+        schema:
+          type: string
+        example: АДМ
+      - name: object
+        in: path
+        description: "Объект, регистрацию изменений которого необходимо очистить"
+        required: true
+        schema:
+          type: string
+        example: units
+      - name: messageNumber
+        in: path
+        description: Номер сообщения
+        required: true
+        schema:
+          type: string
+        example: "15"
+      responses:
+        "200":
+          description: Подтверждение успешно получено
+        "204":
+          description: Не найдены изменения по данным условиям
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не задан/задан не верно параметр
+        "500":
+          description: Не обработанная ошибка
+components:
+  schemas:
+    externalCode:
+      type: string
+      description: идентификатор элемента
+      example: a0100001-5b97-4e18-9d1c-000000000001
+    deleted:
+      type: array
+      description: идентификаторы удаленных/помеченных на удаление элементов
+      items:
+        $ref: "#/components/schemas/externalCode"
+    unit:
+      required:
+      - externalCode
+      - shortName
+      type: object
+      properties:
+        shortName:
+          type: string
+          example: гр.
+        fullName:
+          type: string
+          example: Грамм
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+    units:
+      required:
+      - deleted
+      - units
+      type: object
+      properties:
+        units:
+          type: array
+          items:
+            $ref: "#/components/schemas/unit"
+        deleted:
+          $ref: "#/components/schemas/deleted"
+    property:
+      required:
+      - externalCode
+      - name
+      - type
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        type:
+          type: string
+          example: list
+        name:
+          type: string
+          example: Лейблы
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/property_options"
+    properties:
+      required:
+      - deleted
+      - properties
+      type: object
+      properties:
+        properties:
+          type: array
+          items:
+            $ref: "#/components/schemas/property"
+        deleted:
+          $ref: "#/components/schemas/deleted"
+    storage:
+      required:
+      - allowOrdering
+      - city
+      - externalCode
+      - isDefault
+      - name
+      - priceTypes
+      - schedule
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        name:
+          type: string
+          example: "Дом Еды № 4 пр.Мира, 1а"
+        address:
+          type: string
+          example: "пр.Мира, 1а"
+        city:
+          type: string
+          example: Кострома
+        allowOrdering:
+          type: boolean
+          example: true
+        isDefault:
+          type: boolean
+          example: false
+        schedule:
+          type: string
+          example: с 09:00 по 22:01
+        priceTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/storage_priceTypes"
+    storages:
+      required:
+      - deleted
+      - storages
+      type: object
+      properties:
+        storages:
+          type: array
+          items:
+            $ref: "#/components/schemas/storage"
+        deleted:
+          $ref: "#/components/schemas/deleted"
+    price:
+      required:
+      - externalCode
+      - prices
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        prices:
+          type: array
+          items:
+            $ref: "#/components/schemas/price_prices"
+    productsPrices:
+      required:
+      - productsPrices
+      type: object
+      properties:
+        productsPrices:
+          type: array
+          items:
+            $ref: "#/components/schemas/price"
+    product:
+      required:
+      - article
+      - barcode
+      - categories
+      - description
+      - externalCode
+      - name
+      - properties
+      - unitExternalCode
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        name:
+          type: string
+          example: Гренки Фишка 120гр Английского бекона
+        article:
+          type: string
+        description:
+          type: string
+        unitExternalCode:
+          $ref: "#/components/schemas/externalCode"
+        barcode:
+          type: string
+          example: "4620757014356"
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/externalCode"
+        properties:
+          type: array
+          items:
+            $ref: "#/components/schemas/product_properties"
+    products:
+      required:
+      - deleted
+      - products
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/product"
+        deleted:
+          $ref: "#/components/schemas/deleted"
+    rest:
+      required:
+      - externalCode
+      - storages
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        storages:
+          type: array
+          items:
+            $ref: "#/components/schemas/rest_storages"
+    rests:
+      required:
+      - rests
+      type: object
+      properties:
+        rests:
+          type: array
+          items:
+            $ref: "#/components/schemas/rest"
+    group:
+      required:
+      - externalCode
+      - name
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        name:
+          type: string
+          example: Зоотовары
+        groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/group_groups"
+    groups:
+      required:
+      - deleted
+      - groups
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/group"
+        deleted:
+          $ref: "#/components/schemas/deleted"
+    categoryProperty:
+      required:
+      - categories
+      - externalCode
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        categories:
+          $ref: "#/components/schemas/categoryProperty_categories"
+    categoryProperties:
+      required:
+      - categoryProperties
+      type: object
+      properties:
+        categoryProperties:
+          type: array
+          items:
+            $ref: "#/components/schemas/categoryProperty"
+    photo:
+      required:
+      - externalCode
+      - pictures
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        pictures:
+          type: array
+          items:
+            $ref: "#/components/schemas/photo_pictures"
+    photos:
+      required:
+      - photos
+      type: object
+      properties:
+        photos:
+          type: array
+          items:
+            $ref: "#/components/schemas/photo"
+    general:
+      type: object
+      properties:
+        unitsGr:
+          $ref: "#/components/schemas/units"
+        propertiesGr:
+          $ref: "#/components/schemas/properties"
+        storagesGr:
+          $ref: "#/components/schemas/storages"
+        productsGr:
+          $ref: "#/components/schemas/products"
+        groupsGr:
+          $ref: "#/components/schemas/groups"
+        categoryPropertiesGr:
+          $ref: "#/components/schemas/categoryProperties"
+        photossGr:
+          $ref: "#/components/schemas/photos"
+        productsPricesGr:
+          $ref: "#/components/schemas/productsPrices"
+        restsGr:
+          $ref: "#/components/schemas/rests"
+    property_options:
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        value:
+          type: string
+          example: Хит
+    storage_priceTypes:
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        name:
+          type: string
+          example: 03.0 Дом Еды
+    price_prices:
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        pricePerUnit:
+          type: number
+          example: 51.1
+    product_properties:
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        type:
+          type: string
+          example: list
+        value:
+          type: array
+          description: тип свойства зависит от значения атрибута type
+          items:
+            $ref: "#/components/schemas/externalCode"
+    rest_storages:
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        quantity:
+          type: number
+          example: 10.765
+    group_groups:
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        name:
+          type: string
+          example: Для черепах
+    categoryProperty_categories:
+      type: object
+      properties:
+        "6d414dca-38c4-11f1-baa7-04421a22bb36":
+          type: array
+          description: УИ категории
+          items:
+            $ref: "#/components/schemas/externalCode"
+        "6d414dca-38c4-11f1-baa7-04421a22bb37":
+          type: array
+          description: УИ подкатегории
+          items:
+            $ref: "#/components/schemas/externalCode"
+    photo_pictures:
+      type: object
+      properties:
+        fullPath:
+          type: string
+          example: //192.168.101.102/edadeal/images/20200612/Гренки_Фишка_120гр_Английского_бекона_.png
