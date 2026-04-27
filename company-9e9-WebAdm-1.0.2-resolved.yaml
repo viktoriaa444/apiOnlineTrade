@@ -6,8 +6,8 @@ info:
     name: '@freska_04'
   version: 1.0.2
 servers:
-- url: http://192.168.103.123/IronOnlineTrade/hs/api/v1/
-  description: Dev server
+- url: http://88.86.81.195:8083/IronOnlineTrade/hs/api/v1/
+  description: Not dev server  
 paths:
   /exchange/general:
     get:
