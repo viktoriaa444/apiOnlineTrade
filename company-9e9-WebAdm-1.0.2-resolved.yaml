@@ -7,7 +7,9 @@ info:
   version: 1.0.2
 servers:
 - url: http://88.86.81.195:8083/IronOnlineTrade/hs/api/v1/
-  description: Not dev server  
+  description: Копия базы 
+- url: http://88.86.81.195:8083/OnlineTrading/hs/api/v1/
+  description: БИЗ
 paths:
   /exchange/general:
     get:
