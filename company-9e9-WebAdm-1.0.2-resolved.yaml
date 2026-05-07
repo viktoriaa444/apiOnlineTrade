@@ -14,8 +14,8 @@ paths:
   /exchange/general:
     get:
       tags:
-      - general
-      summary: общий метод выгрузки изменений
+      - object
+      summary: общий метод выгрузки измененных элементов
       description: Получение изменений справочников и регистров
       operationId: generalGet
       parameters:
@@ -25,7 +25,7 @@ paths:
         required: true
         schema:
           type: string
-        example: АДМ
+        example: ADM
       responses:
         "200":
           description: Успешный ответ со списком измененных элеменов
@@ -46,10 +46,33 @@ paths:
           description: Не задан код магазина / Не найден магазин / Не найден узел обмена
         "500":
           description: Ошибка сервера
+  /order/creature:
+    post:
+      tags:
+      - documents
+      summary: создание документа "Заказ покупателя"
+      description: Создает заказ на основе переданных в теле параметров
+      operationId: orderPost
+      requestBody:
+        required: true
+        description: "Код ИМ, определяющий источник посылаемого запроса"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/order"
+      responses:
+        "200":
+          description: Заказ создан
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Документ существует / Не опрределено тело запроса / Не опрределено тело запроса обмена / Не найден УИ заказа
+        "500":
+          description: Ошибка сервера                
   /exchange/units:
     get:
       tags:
-      - separately
+      - not relevant
       summary: единицы измерения
       description: Получение изменений справочника "КлассификаторЕдиницИзмерения"
       operationId: unitsGet
@@ -84,7 +107,7 @@ paths:
   /exchange/properties:
     get:
       tags:
-      - separately
+      - not relevant
       summary: свойства номенклатуры
       description: "Получение изменений справочников \"Стикеры\", \"ВидПродукта\" и \"АналитическиеПризнакиНоменклатуры\". Элементы признаков типа \"list\" выгружаются лишь измененные"
       operationId: propertiesGet
@@ -119,7 +142,7 @@ paths:
   /exchange/storages:
     get:
       tags:
-      - separately
+      - not relevant
       summary: магазины
       description: Получение изменений справочника "Магазины"
       operationId: storagesGet
@@ -154,7 +177,7 @@ paths:
   /exchange/prices:
     get:
       tags:
-      - separately
+      - not relevant
       summary: цены товаров
       description: Получение изменений справочника "ЦеныНоменклатуры"
       operationId: pricesGet
@@ -189,7 +212,7 @@ paths:
   /exchange/products:
     get:
       tags:
-      - separately
+      - not relevant
       summary: товары
       description: Получение изменений справочника "Номенклатура"
       operationId: productsGet
@@ -224,7 +247,7 @@ paths:
   /exchange/rests:
     get:
       tags:
-      - separately
+      - not relevant
       summary: остатки товаров
       description: Получение изменений регистра сведений "ОстаткиТоваров"
       operationId: restsGet
@@ -259,7 +282,7 @@ paths:
   /exchange/groups:
     get:
       tags:
-      - separately
+      - not relevant
       summary: "категории, подкатегории"
       description: Получение изменений справочника "НаборыПризнаковНоменклатуры"
       operationId: groupsGet
@@ -294,7 +317,7 @@ paths:
   /exchange/categoryProperties:
     get:
       tags:
-      - separately
+      - not relevant
       summary: виды продуктов
       description: Получение изменений справочника "ПризнакиИнтернетМагазина"
       operationId: gcategoryPropertiesGet
@@ -329,7 +352,7 @@ paths:
   /exchange/photos:
     get:
       tags:
-      - separately
+      - not relevant
       summary: картинки товаров
       description: Получение изменений справочника "ПрисоеденненныеФайлыНоменклатура"
       operationId: photosGet
@@ -364,7 +387,7 @@ paths:
   /unregister/{object}/{messageNumber}:
     patch:
       tags:
-      - unregister
+      - object
       summary: подтверждение загрузки данных
       description: Отмена регистрации изменений
       operationId: unregisterPatch
@@ -375,7 +398,7 @@ paths:
         required: true
         schema:
           type: string
-        example: АДМ
+        example: ADM
       - name: object
         in: path
         description: "Объект, регистрацию изменений которого необходимо очистить"
@@ -401,6 +424,7 @@ paths:
           description: Не задан/задан не верно параметр
         "500":
           description: Не обработанная ошибка
+
 components:
   schemas:
     externalCode:
@@ -653,21 +677,21 @@ components:
     photo:
       required:
       - externalCode
-      - pictures
+      - medias
       type: object
       properties:
         externalCode:
           $ref: "#/components/schemas/externalCode"
-        pictures:
+        medias:
           type: array
           items:
             $ref: "#/components/schemas/photo_pictures"
     photos:
       required:
-      - photos
+      - media
       type: object
       properties:
-        photos:
+        media:
           type: array
           items:
             $ref: "#/components/schemas/photo"
@@ -686,12 +710,186 @@ components:
           $ref: "#/components/schemas/groups"
         categoryPropertiesGr:
           $ref: "#/components/schemas/categoryProperties"
-        photossGr:
+        mediaGr:
           $ref: "#/components/schemas/photos"
         productsPricesGr:
           $ref: "#/components/schemas/productsPrices"
         restsGr:
           $ref: "#/components/schemas/rests"
+    order:
+      required:
+      - externalCode
+      - number
+      - createdAt
+      - storageExternalCode
+      - status
+      - customer
+      - delivery
+      - slot
+      - replacementPolicy
+      - payment
+      - items
+      - totals
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        number:
+          type: string
+          example: "11826"
+        createdAt:
+          type: string
+          example: "2026-04-26T17:20:07+03:00"
+        storageExternalCode:
+          $ref: "#/components/schemas/externalCode"
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "CREATED"
+              description: CREATED;ASSEMBLED;WITH_COURIER;READY_FOR_PICKUP;COMPLETED; CANCELLED ; 
+        customer:
+          type: object
+          properties:
+            firstName:
+              type: string
+              example: "Матвей" 
+            lastName:
+              type: string
+              example: "Тестовый"  
+            phone:
+              type: string
+              example: "+78005553535"
+            email:
+              type: string
+              example: "test@test.ru"
+            loyaltyCardNumber:
+              type: string
+              example: "20467113"  
+        delivery:
+          type: object
+          properties:
+            method:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "COURIER"
+                  description: PICKUP;COURIER;  
+            address:
+              description: может быть null
+              type: object
+              properties:
+                fullAddress: 
+                  type: string
+                  example: "г. Кострома, улица Юрия Беленогова, 30"
+                shortAddress: 
+                  type: string
+                  example: "ул. Юрия Беленогова, 30"
+                latitude: 
+                  type: string
+                  example: "38.6564"
+                longitude: 
+                  type: string
+                  example: "40.2224"
+                apartment: 
+                  type: string
+                  example: "13"
+                  description: квартира
+                intercom: 
+                  type: string
+                  example: "38"
+                  description: домофон, может быть null
+                floor: 
+                  type: number
+                  example: 5
+                entrance: 
+                  type: number
+                  example: 1
+                isPrivateHouse: 
+                  type: boolean
+                  example: false  
+            slot:
+              type: object
+              properties:
+                date: 
+                  type: string
+                  example: "2026-04-26"
+                from: 
+                  type: string
+                  example: "18:00"
+                to: 
+                  type: string
+                  example: "19:00"
+            comment: 
+              type: string
+              description: может быть null
+              example: "комм" 
+            replacementPolicy:
+              type: object
+              properties:
+                code: 
+                  type: string
+                  example: "REPLACE_NO_CALL"
+                  description: CALL_THEN_REPLACE;CALL_THEN_REMOVE ;REPLACE_NO_CALL ;REMOVE_NO_CALL ;
+        payment:
+          type: object
+          properties:
+            method:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "CARD_ONLINE"
+                  description: CARD_ON_DELIVERY;CARD_ONLINE;
+        appliedDiscount:
+          type: object
+          description: может быть null
+          properties:
+            type:
+                type: string
+                example: "bonuses"
+                description: bonuses;promo; 
+            value:
+                type: string
+                example: "200" 
+            code:
+                type: string
+                example: "NEW200" 
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productExternalCode: 
+                $ref: "#/components/schemas/externalCode"
+              quantity: 
+                type: number
+                example: 2
+              unitPrice: 
+                type: number
+                example: 100 
+              total: 
+                type: number
+                example: 200   
+        totals:
+          type: object
+          properties:
+            initial: 
+                type: number
+                example: 200
+            discount: 
+                type: number
+                example: 200
+            deliveryPrice:
+                type: number
+                example: 100
+            total: 
+                type: number
+                example: 100      
+            
+ 
     property_options:
       type: object
       properties:
@@ -763,4 +961,4 @@ components:
       properties:
         fullPath:
           type: string
-          example: //192.168.101.102/edadeal/images/20200612/Гренки_Фишка_120гр_Английского_бекона_.png
+          example: "http://88.86.81.195:8080/edadeal/images/20200423/%D0%93%D0%BE%D0%B2%D1%8F%D0%B4%D0%B8%D0%BD%D0%B0_%D1%82%D1%83%D1%88%D0%B5%D0%BD%D0%B0%D1%8F_%D0%9B%D0%AE%D0%9A%D0%A1_%D0%B2%D1%81_325_%D0%B3.jpg"
