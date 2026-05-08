@@ -55,7 +55,6 @@ paths:
       operationId: orderPost
       requestBody:
         required: true
-        description: "Код ИМ, определяющий источник посылаемого запроса"
         content:
           application/json:
             schema:
@@ -66,7 +65,7 @@ paths:
         "401":
           description: Неавторизованный доступ
         "400":
-          description: Документ существует / Не опрределено тело запроса / Не опрределено тело запроса обмена / Не найден УИ заказа
+          description: Документ существует / Не определено тело запроса / Не найден УИ заказа
         "500":
           description: Ошибка сервера                
   /exchange/units:
@@ -748,7 +747,10 @@ components:
             code:
               type: string
               example: "CREATED"
-              description: CREATED;ASSEMBLED;WITH_COURIER;READY_FOR_PICKUP;COMPLETED; CANCELLED ; 
+              description: CREATED;ASSEMBLED;WITH_COURIER;READY_FOR_PICKUP;COMPLETED; CANCELLED ;
+            title:
+              type: string
+              example: "Оформлен"  
         customer:
           type: object
           properties:
@@ -776,7 +778,10 @@ components:
                 code:
                   type: string
                   example: "COURIER"
-                  description: PICKUP;COURIER;  
+                  description: PICKUP;COURIER;
+                title:
+                  type: string
+                  example: "Доставка курьером"   
             address:
               description: может быть null
               type: object
@@ -833,6 +838,9 @@ components:
                   type: string
                   example: "REPLACE_NO_CALL"
                   description: CALL_THEN_REPLACE;CALL_THEN_REMOVE ;REPLACE_NO_CALL ;REMOVE_NO_CALL ;
+                title:
+                  type: string
+                  example: "не звоните, замените на аналогичный"  
         payment:
           type: object
           properties:
@@ -843,6 +851,9 @@ components:
                   type: string
                   example: "CARD_ONLINE"
                   description: CARD_ON_DELIVERY;CARD_ONLINE;
+                title:
+                  type: string
+                  example: "Оплата онлайн"    
         appliedDiscount:
           type: object
           description: может быть null
