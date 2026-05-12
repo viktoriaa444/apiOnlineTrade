@@ -860,7 +860,7 @@ components:
           properties:
             type:
                 type: string
-                example: "bonuses"
+                example: "promo"
                 description: bonuses;promo; 
             value:
                 type: string
