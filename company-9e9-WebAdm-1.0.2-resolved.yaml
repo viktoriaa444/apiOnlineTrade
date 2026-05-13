@@ -862,12 +862,16 @@ components:
                 type: string
                 example: "promo"
                 description: bonuses;promo; 
-            value:
-                type: string
-                example: "200" 
             code:
                 type: string
                 example: "NEW200" 
+            value:
+                type: string
+                example: "200" 
+            unit:
+                type: string
+                example: "RUB"
+                description: RUB; PERCENT
         items:
           type: array
           items:
