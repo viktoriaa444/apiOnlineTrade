@@ -46,7 +46,7 @@ paths:
           description: Не задан код магазина / Не найден магазин / Не найден узел обмена
         "500":
           description: Ошибка сервера
-  /order/creature:
+  /order:
     post:
       tags:
       - documents
@@ -60,14 +60,41 @@ paths:
             schema:
               $ref: "#/components/schemas/order"
       responses:
-        "200":
+        "204":
           description: Заказ создан
         "401":
           description: Неавторизованный доступ
         "400":
           description: Документ существует / Не определено тело запроса / Не найден УИ заказа
         "500":
-          description: Ошибка сервера                
+          description: Ошибка сервера    
+    get:
+      tags:
+      - documents
+      summary: изменения документа "Заказ покупателя"
+      description: Отдает заказ по переданным в теле параметрам
+      operationId: orderGet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/orderPart"
+      responses:
+        "200":
+          description: Успешный ответ со структурой заказа
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/order"
+        "401":
+          description: Неавторизованный доступ
+        "400":
+          description: Не определено тело запроса / Не найден УИ заказа
+        "404":
+          description: Документ не существует 
+        "500":
+          description: Ошибка сервера        
   /exchange/units:
     get:
       tags:
@@ -416,11 +443,13 @@ paths:
         "200":
           description: Подтверждение успешно получено
         "204":
-          description: Не найдены изменения по данным условиям
-        "401":
-          description: Неавторизованный доступ
+          description: Не найдены изменения по данным условиям  
         "400":
           description: Не задан/задан не верно параметр
+        "401":
+          description: Неавторизованный доступ
+        "404":
+          description: Параметр указан некорректно
         "500":
           description: Не обработанная ошибка
 
@@ -903,8 +932,18 @@ components:
             total: 
                 type: number
                 example: 100      
-            
- 
+    orderPart:
+      required:
+      - externalCode
+      - number
+      type: object
+      properties:
+        externalCode:
+          $ref: "#/components/schemas/externalCode"
+        number:
+          type: string
+          example: "11826"
+          
     property_options:
       type: object
       properties:
